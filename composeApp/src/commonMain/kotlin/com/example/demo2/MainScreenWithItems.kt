@@ -51,6 +51,7 @@ import demo2.composeapp.generated.resources.filter_alt_24px
 import demo2.composeapp.generated.resources.home_24px
 import demo2.composeapp.generated.resources.line_end_arrow_24px
 import demo2.composeapp.generated.resources.link_24px
+import demo2.composeapp.generated.resources.more_horiz_24px
 import demo2.composeapp.generated.resources.notifications_24px
 import demo2.composeapp.generated.resources.settings_24px
 import org.jetbrains.compose.resources.painterResource
@@ -149,14 +150,21 @@ fun MainScreenWithItems(modifier: Modifier) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    Box(modifier = Modifier
-                        .clip(RoundedCornerShape(25.dp))
-                        .background(Color.Gray)) {
-                        Icon(painter = painterResource(Res.drawable.filter_alt_24px),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .padding(3.dp))
+//                    Box(modifier = Modifier
+//                        .clip(RoundedCornerShape(25.dp))
+//                        .background( MaterialTheme.colorScheme.ContainerColor)) {
+
+                        IconButton(onClick = { }, modifier =  Modifier
+//                            .align(Alignment.Center)
+
+                            .padding(3.dp)){
+
+                            Icon(painter = painterResource(Res.drawable.filter_alt_24px),
+                                contentDescription = null,)
+
+
+//                        }
+
 
 
                     }
@@ -171,12 +179,12 @@ fun MainScreenWithItems(modifier: Modifier) {
 
                 Box(
                     modifier = Modifier
-                        .clip(RoundedCornerShape(35.dp))
                         .fillMaxWidth()
                         .padding(5.dp)
-                        .background(Color.Gray)
+                        .background( MaterialTheme.colorScheme.ContainerColor, RoundedCornerShape(20.dp))
 
                 ) {
+
                     Column(
                         modifier = Modifier
                             .align(Alignment.TopStart)
@@ -186,6 +194,30 @@ fun MainScreenWithItems(modifier: Modifier) {
                     ) {
                         Text(text = item.name, modifier = Modifier)
                         Text(text = "${item.price}₽")
+                    }
+
+
+                    Box(modifier = Modifier
+//                        .background(Color.Red)
+                        .align(Alignment.CenterEnd)){
+
+                        IconButton(onClick = { }, modifier =  Modifier
+                            .align(Alignment.TopEnd)
+//                            .align(Alignment.Center)
+
+                            .padding(3.dp),
+                            ){
+
+                            Icon(painter = painterResource(Res.drawable.more_horiz_24px),
+                                contentDescription = null,)
+
+
+//                        }
+
+
+
+                        }
+
                     }
 
 
