@@ -55,6 +55,13 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            // MVI-KMP для поддержки ViewModel в KMP
+            implementation("com.arkivanov.mvikotlin:mvikotlin:4.2.0")
+            // ИЛИ более легковесный вариант только для ViewModel:
+            implementation("com.arkivanov.essenty:lifecycle-coroutines:2.0.0")
+
+            // Часто используют готовую обертку под ViewModel:
+            implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
             // Ядро клиента Ktor
             implementation("io.ktor:ktor-client-core:3.4.1")
             // Сериализация JSON
@@ -62,6 +69,7 @@ kotlin {
             // Плагин для обработки контента (JSON) в Ktor
             implementation("io.ktor:ktor-client-content-negotiation:3.4.1")
             implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.1")
+            implementation("io.ktor:ktor-client-logging:2.3.9")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
