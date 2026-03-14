@@ -17,6 +17,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -55,13 +56,22 @@ import demo2.composeapp.generated.resources.more_horiz_24px
 import demo2.composeapp.generated.resources.notifications_24px
 import demo2.composeapp.generated.resources.settings_24px
 import org.jetbrains.compose.resources.painterResource
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 
 
 @Composable
 fun MainScreenWithItems(modifier: Modifier) {
 
     var ProductList by remember { mutableStateOf(mutableListOf(Product(name = "товар1", price = 10000, availability = true, id = 1))) }
-
+    var userChoice by remember { mutableStateOf<Marketplace?>(null) }
     Box(
         modifier
             .fillMaxSize()
@@ -101,7 +111,15 @@ fun MainScreenWithItems(modifier: Modifier) {
 
             }
 
-
+            item{
+                M3DropdownMenu(
+                    initialValue = "Площадка",
+                    onOptionSelected = { newValue ->
+                        userChoice = newValue // Значение передано сюда
+                    }
+                )
+//                M3DropdownMenu()
+            }
 
             item {
                 val message = remember { mutableStateOf("") }
@@ -111,7 +129,7 @@ fun MainScreenWithItems(modifier: Modifier) {
                     textStyle = TextStyle(fontSize = 15.sp),
                     onValueChange = { newText -> message.value = newText },
                     placeholder = { Text("Вставьте ссылку на товар") },
-                    modifier = Modifier.clip(RoundedCornerShape(30.dp)),
+                    modifier = Modifier.padding(top = 10.dp).clip(RoundedCornerShape(30.dp)),
                     colors = TextFieldDefaults.colors(
                         unfocusedIndicatorColor = Color.Transparent,
                         focusedIndicatorColor = Color.Transparent,
@@ -130,7 +148,9 @@ fun MainScreenWithItems(modifier: Modifier) {
 
 
 
-                Button(onClick = { }, modifier = Modifier.padding(10.dp)) {
+                Button(onClick = {
+                    println(userChoice)
+                }, modifier = Modifier.padding(10.dp)) {
 
                     Text(text = "Продолжить", modifier = Modifier)
 //                Icon(
@@ -141,6 +161,7 @@ fun MainScreenWithItems(modifier: Modifier) {
                 }
 
             }
+
             item{
                 Row(
                     modifier = Modifier
@@ -157,7 +178,10 @@ fun MainScreenWithItems(modifier: Modifier) {
                         IconButton(onClick = { }, modifier =  Modifier
 //                            .align(Alignment.Center)
 
-                            .padding(3.dp)){
+                            .padding(3.dp),
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = Color.Gray
+                            )){
 
                             Icon(painter = painterResource(Res.drawable.filter_alt_24px),
                                 contentDescription = null,)
@@ -181,7 +205,7 @@ fun MainScreenWithItems(modifier: Modifier) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(5.dp)
-                        .background( MaterialTheme.colorScheme.ContainerColor, RoundedCornerShape(20.dp))
+                        .background( MaterialTheme.colorScheme.ContainerColor, RoundedCornerShape(15.dp))
 
                 ) {
 
@@ -259,6 +283,7 @@ fun MainScreenWithItems(modifier: Modifier) {
                                 .size(50.dp)
                                 .padding(4.dp)
                                 .align(Alignment.Center),
+//                            tint = Color.Blue
                         )
                     }
                     Box(
@@ -322,6 +347,72 @@ fun MainScreenWithItems(modifier: Modifier) {
     }
 
 
+}
+
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun M3DropdownMenu(
+    // Начальное значение
+    initialValue: String = "Площадка",
+    // Функция обратного вызова для передачи данных наружу
+    onOptionSelected: (Marketplace) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+    // Используем initialValue для инициализации
+    var selectedOptionText by remember { mutableStateOf(initialValue) }
+    val options = listOf(Marketplace.WILDBERRIES, Marketplace.OZON, Marketplace.YANDEX_MARKET)
+
+    fun getColorForOption(option: String): Color {
+        return when (option) {
+            "Wildberries" -> Color.Magenta
+            "Ozon" -> Color.Blue
+            "Яндекс Маркет" -> Color.Yellow
+            else -> Color.Gray // Цвет по умолчанию
+        }
+    }
+
+    val borderColor = getColorForOption(selectedOptionText)
+
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            shape = RoundedCornerShape(20.dp),
+            readOnly = true,
+            value = selectedOptionText,
+            onValueChange = {},
+            label = { Text("") },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = Modifier.menuAnchor(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = borderColor,
+                unfocusedBorderColor = borderColor
+            )
+        )
+
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            options.forEach { selectionOption ->
+                DropdownMenuItem(
+                    text = { Text(selectionOption.displayName) },
+                    onClick = {
+                        selectedOptionText = selectionOption.displayName
+                        expanded = false
+                        // ГЛАВНОЕ: Вызываем переданную функцию и отдаем значение
+                        onOptionSelected(selectionOption)
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                )
+            }
+        }
+    }
 }
 
 

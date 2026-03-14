@@ -27,6 +27,7 @@ fun App() {
     MaterialTheme {
         Scaffold {
             MainScreenWithItems(modifier = Modifier.padding(it))
+//            TrackSetupScreen(platformName = "Ozon", isPushEnabled = true, onPushToggle = { }, targetPrice = "2500", onTargetPriceChange = {}, isStockTrackingEnabled = false, onStockTrackingToggle = {}, onSaveClick = {}  )
 
         }
     }

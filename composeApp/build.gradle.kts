@@ -42,13 +42,11 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation("androidx.core:core-ktx:1.15.0")
-            implementation("androidx.compose.ui:ui:1.7.4")
-            implementation("androidx.compose.material:material:1.7.4")
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -57,11 +55,19 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            // Ядро клиента Ktor
+            implementation("io.ktor:ktor-client-core:3.4.1")
+            // Сериализация JSON
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+            // Плагин для обработки контента (JSON) в Ktor
+            implementation("io.ktor:ktor-client-content-negotiation:3.4.1")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
         jvmMain.dependencies {
+//            implementation("io.ktor:ktor-client-cio:2.3.7")
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
         }
