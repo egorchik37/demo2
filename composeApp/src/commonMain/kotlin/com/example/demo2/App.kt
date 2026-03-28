@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.navigator.Navigator
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -26,7 +27,8 @@ import demo2.composeapp.generated.resources.compose_multiplatform
 fun App() {
     MaterialTheme {
         Scaffold {
-            GreetingScreen()
+            Navigator(HomeScreen())
+//            GreetingScreen()
 //            MainScreenWithItems(modifier = Modifier.padding(it))
 //            TrackSetupScreen(platformName = "Ozon", isPushEnabled = true, onPushToggle = { }, targetPrice = "2500", onTargetPriceChange = {}, isStockTrackingEnabled = false, onStockTrackingToggle = {}, onSaveClick = {}  )
 

@@ -32,21 +32,33 @@ data class UserResponse(val message: String)
 
 class ApiClient(private val baseUrl: String) {
 
-    private val client = HttpClient {
-        // Устанавливаем плагин для работы с JSON
-        install(ContentNegotiation) {
-            json(Json {
-                prettyPrint = true      // Для красивого лога
-                isLenient = true        // Прощает мелкие ошибки JSON
-                ignoreUnknownKeys = true // Игнорирует поля, которых нет в data class
-            })
-        }
 
-        // Логирование запросов и ответов (видно в Logcat / Xcode console)
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.ALL // Заголовки, тело, статус
-        }
+
+    // ---------------------------------------------------------
+    // 3. МЕТОД ЗАПРОСА
+    // ---------------------------------------------------------
+
+    /**
+     * Отправляет POST запрос на указанный endpoint.
+     * @param endpoint Путь относительно baseUrl (например, "greeting" или "/api/v1/user")
+     * @param name Имя пользователя
+     */
+    suspend fun getGreeting(endpoint: String, art: String): Result<String> {
+         val client = HttpClient {
+            // Устанавливаем плагин для работы с JSON
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true      // Для красивого лога
+                    isLenient = true        // Прощает мелкие ошибки JSON
+                    ignoreUnknownKeys = true // Игнорирует поля, которых нет в data class
+                })
+            }
+
+            // Логирование запросов и ответов (видно в Logcat / Xcode console)
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.ALL // Заголовки, тело, статус
+            }
 
 //        // Таймауты (защита от зависания)
 //        install(HttpTimeout) {
@@ -60,18 +72,7 @@ class ApiClient(private val baseUrl: String) {
 //            url(baseUrl) // Базовый URL для всех запросов
 //            contentType(ContentType.Application.Json)
 //        }
-    }
-
-    // ---------------------------------------------------------
-    // 3. МЕТОД ЗАПРОСА
-    // ---------------------------------------------------------
-
-    /**
-     * Отправляет POST запрос на указанный endpoint.
-     * @param endpoint Путь относительно baseUrl (например, "greeting" или "/api/v1/user")
-     * @param name Имя пользователя
-     */
-    suspend fun getGreeting(endpoint: String, art: String): Result<String> {
+        }
         return try {
             // Выполняем POST запрос
             val response: UserResponse = client.post(endpoint) {
@@ -90,8 +91,5 @@ class ApiClient(private val baseUrl: String) {
         }
     }
 
-    // Метод для закрытия клиента (вызывать при завершении приложения, если нужно)
-    fun close() {
-        client.close()
-    }
+    // Метод для закрытия клиента (вызывать при завершении приложения, если нужно
 }

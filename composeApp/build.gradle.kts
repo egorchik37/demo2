@@ -70,6 +70,9 @@ kotlin {
             implementation("io.ktor:ktor-client-content-negotiation:3.4.1")
             implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.1")
             implementation("io.ktor:ktor-client-logging:2.3.9")
+
+
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

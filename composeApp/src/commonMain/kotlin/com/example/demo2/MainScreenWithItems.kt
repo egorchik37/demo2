@@ -57,6 +57,7 @@ import demo2.composeapp.generated.resources.notifications_24px
 import demo2.composeapp.generated.resources.settings_24px
 import org.jetbrains.compose.resources.painterResource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -65,12 +66,16 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.demo2.viewModels.MainViewModel
+import com.example.demo2.viewModels.UiState
 
 
 @Composable
-fun MainScreenWithItems(modifier: Modifier) {
+fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
 
-    var ProductList by remember { mutableStateOf(mutableListOf(Product(name = "товар1", price = 10000, availability = true, id = 1))) }
+    val uiState by vm.uiState.collectAsState()
+    var ProductList by remember { mutableStateOf(mutableListOf(Product(10000,true,"ozon", 1))) }
     var userChoice by remember { mutableStateOf<Marketplace?>(null) }
     Box(
         modifier
@@ -149,8 +154,12 @@ fun MainScreenWithItems(modifier: Modifier) {
 
 
                 Button(onClick = {
-                    println(userChoice)
-                }, modifier = Modifier.padding(10.dp)) {
+                    if (message.value.isNotBlank()) {
+                        vm.fetchGreeting(message.value)
+                    }
+                },
+                    enabled = uiState !is UiState.Loading,
+                    modifier = Modifier.padding(10.dp)) {
 
                     Text(text = "Продолжить", modifier = Modifier)
 //                Icon(
@@ -194,6 +203,13 @@ fun MainScreenWithItems(modifier: Modifier) {
                     }
 
                 }
+            }
+            item{ when (val state = uiState) {
+                is UiState.Idle -> Text("Введите имя и нажмите кнопку")
+                is UiState.Loading -> CircularProgressIndicator() // Спиннер
+                is UiState.Success -> Text("✅ Ответ сервера: ${state.message}")
+                is UiState.Error -> Text("❌ Ошибка: ${state.errorMessage}", color = Color.Red)
+            }
             }
 
             items(ProductList, {ProductList -> ProductList.id}) { item ->

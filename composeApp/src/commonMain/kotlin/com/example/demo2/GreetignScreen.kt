@@ -12,11 +12,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.demo2.viewModels.MainViewModel
 import com.example.demo2.viewModels.UiState
 
 @Composable
-fun GreetingScreen(viewModel: MainViewModel =) {
+fun GreetingScreen(viewModel: MainViewModel = viewModel()) {
     var nameInput by remember { mutableStateOf("") }
 
     // Собираем состояние из ViewModel (автоматически перерисовывает экран при изменении)
