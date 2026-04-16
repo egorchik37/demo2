@@ -47,7 +47,7 @@ fun GreetingScreen(viewModel: MainViewModel = viewModel()) {
             is UiState.Idle -> Text("Введите имя и нажмите кнопку")
             is UiState.Loading -> CircularProgressIndicator() // Спиннер
             is UiState.Success -> Text("✅ Ответ сервера: ${state.message}")
-            is UiState.Error -> Text("❌ Ошибка: ${state.errorMessage}", color = Color.Red)
+            is UiState.Error -> Text("❌ Ошибка: ${state.message}", color = Color.Red)
         }
     }
 }

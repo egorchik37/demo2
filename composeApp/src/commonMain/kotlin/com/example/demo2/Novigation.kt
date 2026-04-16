@@ -7,6 +7,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.example.demo2.network.ApiClient
+import com.example.demo2.network.AppGraph
+import com.example.demo2.network.createHttpClient
 import com.example.demo2.viewModels.MainViewModel
 
 class AddLink(
@@ -40,7 +43,8 @@ class HomeScreen() : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val vm = rememberScreenModel{ MainViewModel() }
+
+        val vm = rememberScreenModel{ MainViewModel(apiClient = AppGraph.apiClient) }
 
         MainScreenWithItems(modifier = Modifier, vm = vm)
     }

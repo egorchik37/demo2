@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -34,17 +35,19 @@ kotlin {
         binaries.executable()
     }
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        browser()
-        binaries.executable()
-    }
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        browser()
+//        binaries.executable()
+//    }
 
     sourceSets {
         androidMain.dependencies {
 
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation("io.ktor:ktor-client-okhttp:2.3.9")
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -55,6 +58,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
             // MVI-KMP для поддержки ViewModel в KMP
             implementation("com.arkivanov.mvikotlin:mvikotlin:4.2.0")
             // ИЛИ более легковесный вариант только для ViewModel:
@@ -63,14 +67,13 @@ kotlin {
             // Часто используют готовую обертку под ViewModel:
             implementation("cafe.adriel.voyager:voyager-screenmodel:1.0.0")
             // Ядро клиента Ktor
-            implementation("io.ktor:ktor-client-core:3.4.1")
+            implementation("io.ktor:ktor-client-core:2.3.9")
             // Сериализация JSON
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
             // Плагин для обработки контента (JSON) в Ktor
-            implementation("io.ktor:ktor-client-content-negotiation:3.4.1")
-            implementation("io.ktor:ktor-serialization-kotlinx-json:3.4.1")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.9")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.9")
             implementation("io.ktor:ktor-client-logging:2.3.9")
-
 
 
         }
