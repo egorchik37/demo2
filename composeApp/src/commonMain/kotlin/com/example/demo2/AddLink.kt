@@ -16,19 +16,19 @@ import demo2.composeapp.generated.resources.arrow
 import demo2.composeapp.generated.resources.autorenew_24px
 import demo2.composeapp.generated.resources.home_24px
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TrackSetupScreen(
     platformName: String,
-    isPushEnabled: Boolean,
-    onPushToggle: (Boolean) -> Unit,
-    targetPrice: String,
-    onTargetPriceChange: (String) -> Unit,
-    isStockTrackingEnabled: Boolean,
-    onStockTrackingToggle: (Boolean) -> Unit,
-    onSaveClick: () -> Unit,
+    initialTargetPrice: String,
+    onSaveClick: (price: String, push: Boolean, stock: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isPushEnabled by remember { mutableStateOf(false) }
+    var targetPrice by remember { mutableStateOf(initialTargetPrice) }
+    var isStockTrackingEnabled by remember { mutableStateOf(false) }
+
     Surface(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -39,9 +39,12 @@ fun TrackSetupScreen(
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Заголовок с названием платформы
+
+            // Заголовок
             Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
                 elevation = CardDefaults.elevatedCardElevation(defaultElevation = 2.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -55,59 +58,53 @@ fun TrackSetupScreen(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
                         ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant                    )
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
                 }
             }
 
-            // Push-уведомления
+            // Push
             SettingSwitchRow(
                 title = "Получать push-уведомления",
                 isChecked = isPushEnabled,
-                onCheckedChange = onPushToggle
+                onCheckedChange = { isPushEnabled = it }
             )
 
-            // Пороговая цена
+            // Цена
             OutlinedTextField(
                 value = targetPrice,
-                onValueChange = onTargetPriceChange,
+                onValueChange = { targetPrice = it },
                 label = { Text("Уведомлять при цене ≤") },
                 placeholder = { Text("Например: 4990") },
                 shape = RoundedCornerShape(15.dp),
-//                keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
-//                    keyboardType = androidx.compose.ui.text.input.KeyboardType.Decimal
-//                )
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-                ,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                ),
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Отслеживание наличия
+            // Наличие
             SettingSwitchRow(
                 title = "Уведомлять о появлении в наличии",
                 isChecked = isStockTrackingEnabled,
-                onCheckedChange = onStockTrackingToggle
+                onCheckedChange = { isStockTrackingEnabled = it }
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Кнопка действия
+            // Кнопка
             Button(
-                onClick = onSaveClick,
+                onClick = {
+                    onSaveClick(targetPrice, isPushEnabled, isStockTrackingEnabled)
+                },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                )
+                shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    text = "Начать отслеживание",
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Medium
-                )
+                Text("Начать отслеживание")
             }
-        }    }
+        }
+    }
 }
 
 // Вспомогательный компонент для строк с переключателем

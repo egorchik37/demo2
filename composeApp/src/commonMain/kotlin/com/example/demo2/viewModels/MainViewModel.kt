@@ -3,6 +3,7 @@ package com.example.demo2.viewModels
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
 import com.example.demo2.network.ApiClient
+import com.example.demo2.network.UserResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 sealed class UiState {
     object Idle : UiState()
     object Loading : UiState()
-    data class Success(val message: String) : UiState()
+    data class Success(val message: UserResponse) : UiState()
     data class Error(val message: String) : UiState()
 }
 

@@ -12,28 +12,20 @@ import com.example.demo2.network.AppGraph
 import com.example.demo2.network.createHttpClient
 import com.example.demo2.viewModels.MainViewModel
 
-class AddLink(
+class AddLinkScreen(
     private val platrormName: String,
-    private val isPushEnabled: Boolean,
-    private val onPushToggle: (Boolean) -> Unit,
-    private val targetPrice: String,
-    private val onTargetPriceChange: (String) -> Unit,
-    private val isStockTrackingEnabled: Boolean,
-    private val onStockTrackingToggle: (Boolean) -> Unit,
-    private val onSaveClick: () -> Unit,) : Screen {
+    private val  initialTargetPrice: String,
+    private val onSaveClick: (price: String, push: Boolean, stock: Boolean) -> Unit,
+) : Screen {
 
     override val key: String = "AddLink"
 
     @Composable
     override fun Content(){
        TrackSetupScreen(platformName = platrormName,
-           isPushEnabled = isPushEnabled,
-           onPushToggle = onPushToggle,
-           targetPrice = targetPrice,
-           onTargetPriceChange = onTargetPriceChange,
-           isStockTrackingEnabled = isStockTrackingEnabled,
-           onStockTrackingToggle = onStockTrackingToggle,
-           onSaveClick = onSaveClick)
+     initialTargetPrice = initialTargetPrice,
+           onSaveClick = onSaveClick
+           )
     }
 }
 

@@ -67,12 +67,15 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
 import com.example.demo2.viewModels.MainViewModel
 import com.example.demo2.viewModels.UiState
 
 
 @Composable
 fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
+
+    val navigator = LocalNavigator.current
 
     val uiState by vm.uiState.collectAsState()
     var ProductList by remember { mutableStateOf(mutableListOf(Product(10000,true,"ozon", 1))) }
@@ -133,7 +136,7 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
                     value = message.value,
                     textStyle = TextStyle(fontSize = 15.sp),
                     onValueChange = { newText -> message.value = newText },
-                    placeholder = { Text("Вставьте ссылку на товар") },
+                    placeholder = { Text("Вставьте ссылку или артикул товара") },
                     modifier = Modifier.padding(top = 10.dp).clip(RoundedCornerShape(30.dp)),
                     colors = TextFieldDefaults.colors(
                         unfocusedIndicatorColor = Color.Transparent,
@@ -207,7 +210,20 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
             item{ when (val state = uiState) {
                 is UiState.Idle -> Text("Введите имя и нажмите кнопку")
                 is UiState.Loading -> CircularProgressIndicator() // Спиннер
-                is UiState.Success -> Text("✅ Ответ сервера: ${state.message}")
+                is UiState.Success ->
+                    navigator?.push(AddLinkScreen(platrormName = state.message.name,
+                        initialTargetPrice = state.message.price,
+                        onSaveClick = {price, push, stock ->
+
+                            // 👉 здесь обработка сохранения
+                            println("Цена: $price")
+                            println("Push: $push")
+                            println("Stock: $stock")
+
+                        }))
+//                    Text("✅ Ответ сервера: ${state.message}")
+
+
                 is UiState.Error -> Text("❌ Ошибка: ${state.message}", color = Color.Red)
             }
             }
