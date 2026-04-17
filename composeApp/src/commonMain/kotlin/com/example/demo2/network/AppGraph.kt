@@ -13,3 +13,13 @@ object AppGraph {
         client = httpClient
     )
 }
+
+object TokenStorage {
+    private var token: String? = null
+
+    fun save(newToken: String) {
+        token = newToken
+    }
+
+    fun get(): String? = token
+}

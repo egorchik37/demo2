@@ -18,6 +18,27 @@ import kotlinx.serialization.json.jsonPrimitive
 // --------------------
 // MODELS
 // --------------------
+@Serializable
+data class RegisterRequest(
+    val username: String,
+    val password: String
+)
+
+@Serializable
+data class RegisterResponse(
+    val message: String
+)
+
+@Serializable
+data class LoginRequest(
+    val username: String,
+    val password: String
+)
+
+@Serializable
+data class LoginResponse(
+    val access_token: String
+)
 
 @Serializable
 data class UserRequest(
@@ -39,6 +60,48 @@ class ApiClient(
     private val baseUrl: String,
     private val client: HttpClient
 ) {
+
+    suspend fun register(
+        endpoint: String,
+        username: String,
+        password: String
+    ): Result<Unit> {
+
+        return try {
+
+            client.post {
+                url("$baseUrl/$endpoint")
+                contentType(ContentType.Application.Json)
+                setBody(RegisterRequest(username, password))
+            }
+
+            Result.success(Unit)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+
+    suspend fun login(
+        endpoint: String,
+        username: String,
+        password: String
+    ): Result<String> {
+        return try {
+
+            val response: LoginResponse = client.post {
+                url("$baseUrl/$endpoint")
+                contentType(ContentType.Application.Json)
+                setBody(LoginRequest(username, password))
+            }.body()
+
+            Result.success(response.access_token)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     suspend fun getGreeting(
         endpoint: String,

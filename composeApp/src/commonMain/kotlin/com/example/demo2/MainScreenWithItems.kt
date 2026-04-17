@@ -158,7 +158,7 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
 
                 Button(onClick = {
                     if (message.value.isNotBlank()) {
-                        vm.fetchGreeting(message.value)
+                        vm.fetchItem(message.value)
                     }
                 },
                     enabled = uiState !is UiState.Loading,
@@ -211,8 +211,8 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
                 is UiState.Idle -> Text("Введите имя и нажмите кнопку")
                 is UiState.Loading -> CircularProgressIndicator() // Спиннер
                 is UiState.Success ->
-                    navigator?.push(AddLinkScreen(platrormName = state.message.name,
-                        initialTargetPrice = state.message.price,
+                    navigator?.push(AddLinkScreen(platformName = state.data.name,
+                        initialTargetPrice = state.data.price,
                         onSaveClick = {price, push, stock ->
 
                             // 👉 здесь обработка сохранения

@@ -33,15 +33,22 @@ import demo2.composeapp.generated.resources.TGLogo
 import demo2.composeapp.generated.resources.Welcome
 import demo2.composeapp.generated.resources.ios
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Preview()
 @Composable
-fun WelcomeScreen(modifier: Modifier) {
+fun WelcomeScreen(
+    modifier: Modifier,
+    onLoginClick: () -> Unit,
+    onNavigateToRegister: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()) {
-        Image(painter = painterResource(Res.drawable.Welcome),
+        Image(
+            painter = painterResource(Res.drawable.Welcome),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
-            )
+        )
 //        Image(
 //            painter = painterResource(Res.drawable.Background),
 //            contentDescription = null,
@@ -54,18 +61,25 @@ fun WelcomeScreen(modifier: Modifier) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Welcome", color = Color.White, fontSize = 40.sp, maxLines = 1)
-
+                Text(text = "Добро пожаловать", color = Color.White, fontSize = 40.sp, maxLines = 1)
+                Button(onClick = { }, modifier = Modifier) {
+                    Text(text = "Войти")
+                }
+                Button(onClick = { }, modifier = Modifier) {
+                    Text(text = "Зарегестрироваться")
+                }
 
 
             }
         }
 
-        Box(modifier = modifier.align(Alignment.BottomCenter)){
+        Box(modifier = modifier.align(Alignment.BottomCenter)) {
 
-            Column(modifier = Modifier.align(Alignment.Center),
+            Column(
+                modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center) {
+                verticalArrangement = Arrangement.Center
+            ) {
 
                 Button(
                     onClick = { }, modifier = Modifier
@@ -84,35 +98,47 @@ fun WelcomeScreen(modifier: Modifier) {
                     border = BorderStroke(2.dp, Color.Blue),
 
 
-
-
-                ) {
+                    ) {
                     Text("Войти")
 
                 }
-                Row(modifier = Modifier,
-                    verticalAlignment = Alignment.CenterVertically){
+                Row(
+                    modifier = Modifier,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
 
-                     Box(modifier = Modifier
-                         .size(40.dp)
-                         .padding( end = 5.dp)){
-                          Image(painter = painterResource(Res.drawable.GoogleLogo),
-                              contentDescription = null,
-                              contentScale = ContentScale.Inside)
-                     }
-                    Box(modifier = Modifier
-                        .size(40.dp)
-                        .padding( end = 5.dp)){
-                        Image(painter = painterResource(Res.drawable.ios),
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(end = 5.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.GoogleLogo),
                             contentDescription = null,
-                            contentScale = ContentScale.Inside)
+                            contentScale = ContentScale.Inside
+                        )
                     }
-                    Box(modifier = Modifier
-                        .size(40.dp)
-                        .padding( end = 5.dp)){
-                        Image(painter = painterResource(Res.drawable.TGLogo),
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(end = 5.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.ios),
                             contentDescription = null,
-                            contentScale = ContentScale.Inside)
+                            contentScale = ContentScale.Inside
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .padding(end = 5.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(Res.drawable.TGLogo),
+                            contentDescription = null,
+                            contentScale = ContentScale.Inside
+                        )
                     }
 
                 }
