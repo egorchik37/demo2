@@ -43,10 +43,10 @@ class AuthViewModel(
 
             val result = apiClient.login(LOGIN_ENDPOINT, username, password )
 
-            result.onSuccess { token ->
+            result.onSuccess { result ->
                 // 👉 сохраняем токен
-                TokenStorage.save(token)
-
+                TokenStorage.save(result.token)
+                println(result)
                 _state.value = AuthState.Success
             }.onFailure {
                 _state.value = AuthState.Error(it.message ?: "Error")

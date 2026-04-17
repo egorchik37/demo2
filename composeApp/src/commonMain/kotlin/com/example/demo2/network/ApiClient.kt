@@ -37,7 +37,8 @@ data class LoginRequest(
 
 @Serializable
 data class LoginResponse(
-    val access_token: String
+    val success: Boolean,
+    val token: String
 )
 
 @Serializable
@@ -63,7 +64,7 @@ class ApiClient(
 
     suspend fun register(
         endpoint: String,
-        username: String,
+        login: String,
         password: String
     ): Result<Unit> {
 
@@ -72,7 +73,7 @@ class ApiClient(
             client.post {
                 url("$baseUrl/$endpoint")
                 contentType(ContentType.Application.Json)
-                setBody(RegisterRequest(username, password))
+                setBody(RegisterRequest(login, password))
             }
 
             Result.success(Unit)
@@ -85,18 +86,28 @@ class ApiClient(
 
     suspend fun login(
         endpoint: String,
-        username: String,
+        login: String,
         password: String
-    ): Result<String> {
+    ): Result<LoginResponse> {
         return try {
 
-            val response: LoginResponse = client.post {
+            val response: LoginResponse = client.get {
                 url("$baseUrl/$endpoint")
-                contentType(ContentType.Application.Json)
-                setBody(LoginRequest(username, password))
+                parameter("login", login)
+                parameter("password", password)
+
+                header("Accept", "*/*")
+                header("User-Agent", "Mozilla/5.0")
             }.body()
 
-            Result.success(response.access_token)
+            if (response.success && response.token != null) {
+                Result.success(response)
+            } else {
+                Result.failure(Exception("Неверный логин или пароль"))
+            }
+
+
+//            Result.success(raw)
 
         } catch (e: Exception) {
             Result.failure(e)
@@ -167,7 +178,7 @@ fun createHttpClient(): HttpClient {
         }
 
         install(HttpTimeout) {
-            requestTimeoutMillis = 30_000
+            requestTimeoutMillis = 120_000
             connectTimeoutMillis = 15_000
             socketTimeoutMillis = 30_000
         }

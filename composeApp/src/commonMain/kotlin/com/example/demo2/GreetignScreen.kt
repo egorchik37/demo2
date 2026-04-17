@@ -34,7 +34,7 @@ fun GreetingScreen(viewModel: MainViewModel = viewModel()) {
             onClick = {
                 // Вызываем метод ViewModel при клике
                 if (nameInput.isNotBlank()) {
-                    viewModel.fetchGreeting(nameInput)
+                    viewModel.fetchItem(nameInput)
                 }
             },
             enabled = uiState !is UiState.Loading // Блокируем кнопку во время загрузки
@@ -46,7 +46,7 @@ fun GreetingScreen(viewModel: MainViewModel = viewModel()) {
         when (val state = uiState) {
             is UiState.Idle -> Text("Введите имя и нажмите кнопку")
             is UiState.Loading -> CircularProgressIndicator() // Спиннер
-            is UiState.Success -> Text("✅ Ответ сервера: ${state.message}")
+            is UiState.Success -> Text("✅ Ответ сервера: ${state.data}")
             is UiState.Error -> Text("❌ Ошибка: ${state.message}", color = Color.Red)
         }
     }

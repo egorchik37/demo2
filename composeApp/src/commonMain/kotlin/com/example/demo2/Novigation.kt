@@ -109,7 +109,7 @@ class LoginScreen : Screen {
 
         LaunchedEffect(state) {
             if (state is AuthState.Success) {
-                navigator.pop()
+                navigator.replace(HomeScreen())
             }
         }
     }
