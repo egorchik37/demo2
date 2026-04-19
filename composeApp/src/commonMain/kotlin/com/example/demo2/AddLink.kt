@@ -11,6 +11,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.input.KeyboardType
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import demo2.composeapp.generated.resources.Res
 import demo2.composeapp.generated.resources.arrow
 import demo2.composeapp.generated.resources.autorenew_24px
@@ -25,6 +27,8 @@ fun TrackSetupScreen(
     onSaveClick: (price: String, push: Boolean, stock: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
+    val navigator = LocalNavigator.currentOrThrow
     var isPushEnabled by remember { mutableStateOf(false) }
     var targetPrice by remember { mutableStateOf(initialTargetPrice) }
     var isStockTrackingEnabled by remember { mutableStateOf(false) }
@@ -53,7 +57,7 @@ fun TrackSetupScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Отслеживание на $platformName",
+                        text = "Отслеживаь $platformName",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
@@ -96,7 +100,16 @@ fun TrackSetupScreen(
             // Кнопка
             Button(
                 onClick = {
+
+                    val testData = listOf(
+                        Product2("Шины R16", "5000", 4.8, true, "01.04"),
+                        Product2("Шины R16", "4800", 4.8, true, "05.04"),
+                        Product2("Шины R16", "4500", 4.9, true, "10.04"),
+                        Product2("Шины R16", "4299", 4.9, true, "15.04")
+                    )
+
                     onSaveClick(targetPrice, isPushEnabled, isStockTrackingEnabled)
+                    navigator.push(ProductDetailsScreen(testData))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)

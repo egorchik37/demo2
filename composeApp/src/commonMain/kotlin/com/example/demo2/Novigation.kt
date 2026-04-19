@@ -30,6 +30,7 @@ class WelcomScreen : Screen {
             onNavigateToRegister = { navigator.push(RegisterScreen()) })
     }
 }
+
 class RegisterScreen : Screen {
 
     @Composable
@@ -69,7 +70,6 @@ class RegisterScreen : Screen {
         }
     }
 }
-
 
 
 class LoginScreen : Screen {
@@ -131,6 +131,21 @@ class AddLinkScreen(
             initialTargetPrice = initialTargetPrice,
             onSaveClick = onSaveClick
         )
+    }
+}
+
+class ProductDetailsScreen(
+    private val products: List<Product2>
+) : Screen {
+
+    @Composable
+    override fun Content() {
+        val navigator = LocalNavigator.currentOrThrow
+        ProductDetailsScreenUI(
+            products = products,
+            onBackClick = {
+              navigator.pop()
+            })
     }
 }
 
