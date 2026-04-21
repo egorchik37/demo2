@@ -58,6 +58,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation("androidx.datastore:datastore-preferences:1.1.1")
 
             // MVI-KMP для поддержки ViewModel в KMP
             implementation("com.arkivanov.mvikotlin:mvikotlin:4.2.0")

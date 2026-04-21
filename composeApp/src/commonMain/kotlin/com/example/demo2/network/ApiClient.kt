@@ -18,6 +18,13 @@ import kotlinx.serialization.json.jsonPrimitive
 // --------------------
 // MODELS
 // --------------------
+
+
+@Serializable
+data class TrackItemRequest(
+    val token: String,
+    val art: String
+)
 @Serializable
 data class RegisterRequest(
     val username: String,
@@ -50,7 +57,8 @@ data class UserResponse(
     val price: String,
     val name: String,
     val available: Boolean,
-    val rating: Double
+    val rating: Double,
+    val art: String
 )
 
 // --------------------
@@ -114,6 +122,32 @@ class ApiClient(
         }
     }
 
+    suspend fun addTrackingItem(
+        endpoint: String,
+        token: String,
+        art: String
+    ): Result<Boolean> {
+
+        return try {
+
+            val response: Boolean = client.post {
+                url("$baseUrl/$endpoint")
+                contentType(ContentType.Application.Json)
+                setBody(
+                    TrackItemRequest(
+                        token = token,
+                        art = art
+                    )
+                )
+            }.body()
+
+            Result.success(response)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun getGreeting(
         endpoint: String,
         art: String
@@ -130,7 +164,8 @@ class ApiClient(
                 price = raw[0].jsonPrimitive.content, // 🔥 всегда строка
                 name = raw[1].jsonPrimitive.content,
                 available = raw[2].jsonPrimitive.boolean,
-                rating = raw[3].jsonPrimitive.double
+                rating = raw[3].jsonPrimitive.double,
+                art = art
             )
 
 

@@ -82,7 +82,9 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
     val navigator = LocalNavigator.current
 
     val uiState by vm.uiState.collectAsState()
-    var ProductList by remember { mutableStateOf(mutableListOf(Product(10000,true,"ozon", 1))) }
+    var ProductList by remember {
+        mutableStateOf(mutableListOf(Product(10000,true,"ozon", 1)))
+    }
     var userChoice by remember { mutableStateOf<Marketplace?>(null) }
 
 
@@ -162,7 +164,7 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
                             )
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Uri),
-                        label = { Text(" Вставьте ссылку или артикул товар") }
+                        label = { Text(" Вставьте ссылку или артикул товара") }
                     )
 
 
@@ -223,30 +225,30 @@ fun MainScreenWithItems(modifier: Modifier, vm: MainViewModel) {
 
                     }
                 }
-                item {
-                    when (val state = uiState) {
-                        is UiState.Idle -> Text("Введите имя и нажмите кнопку")
-                        is UiState.Loading -> CircularProgressIndicator() // Спиннер
-                        is UiState.Success ->
-                            navigator?.push(
-                                AddLinkScreen(
-                                    platformName = state.data.name,
-                                    initialTargetPrice = state.data.price,
-                                    onSaveClick = { price, push, stock ->
-
-                                        // 👉 здесь обработка сохранения
-                                        println("Цена: $price")
-                                        println("Push: $push")
-                                        println("Stock: $stock")
-
-                                    })
-                            )
-//                    Text("✅ Ответ сервера: ${state.message}")
-
-
-                        is UiState.Error -> Text("❌ Ошибка: ${state.message}", color = Color.Red)
-                    }
-                }
+//                item {
+//                    when (val state = uiState) {
+//                        is UiState.Idle -> Text("Введите имя и нажмите кнопку")
+//                        is UiState.Loading -> CircularProgressIndicator() // Спиннер
+//                        is UiState.Success ->
+//                            navigator?.push(
+//                                AddLinkScreen(
+//                                    platformName = state.data.name,
+//                                    initialTargetPrice = state.data.price,
+//                                    onSaveClick = { price, push, stock ->
+//
+//                                        // 👉 здесь обработка сохранения
+//                                        println("Цена: $price")
+//                                        println("Push: $push")
+//                                        println("Stock: $stock")
+//
+//                                    })
+//                            )
+////                    Text("✅ Ответ сервера: ${state.message}")
+//
+//
+//                        is UiState.Error -> Text("❌ Ошибка: ${state.message}", color = Color.Red)
+//                    }
+//                }
 
                 items(ProductList, { ProductList -> ProductList.id }) { item ->
 

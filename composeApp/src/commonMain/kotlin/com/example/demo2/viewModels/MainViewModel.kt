@@ -27,6 +27,51 @@ sealed class AuthState {
     data class Error(val message: String) : AuthState()
 }
 
+sealed class TrackState {
+    object Idle : TrackState()
+    object Loading : TrackState()
+    object Success : TrackState()
+    data class Error(val message: String) : TrackState()
+}
+
+//class TrackingViewModel(
+//    private val apiClient: ApiClient
+//) : ScreenModel {
+//
+//    private val _state = MutableStateFlow<TrackState>(TrackState.Idle)
+//    val state: StateFlow<TrackState> = _state
+//
+//    fun addTracking(art: String) {
+//        screenModelScope.launch {
+//
+//            _state.value = TrackState.Loading
+//
+//            val token = TokenStorage.get()
+//
+//            if (token.isNullOrEmpty()) {
+//                _state.value = TrackState.Error("Нет токена")
+//                return@launch
+//            }
+//
+//            val result = apiClient.addTrackingItem(
+//                endpoint = "items/add",
+//                token = token,
+//                art = art
+//            )
+//
+//            result.onSuccess { success ->
+//                _state.value = if (success) {
+//                    TrackState.Success
+//                } else {
+//                    TrackState.Error("Не удалось добавить")
+//                }
+//            }.onFailure {
+//                _state.value = TrackState.Error(it.message ?: "Ошибка")
+//            }
+//        }
+//    }
+//}
+
 
 
 class AuthViewModel(
@@ -88,6 +133,9 @@ class MainViewModel(
     private val apiClient: ApiClient
 ) : ScreenModel {
 
+    private val _trackState = MutableStateFlow<TrackState>(TrackState.Idle)
+
+    val trackState: StateFlow<TrackState> = _trackState
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState
 
@@ -107,6 +155,35 @@ class MainViewModel(
                 _uiState.value = UiState.Error(
                     error.message ?: "Unknown error"
                 )
+            }
+        }
+    }
+    fun addTracking(art: String) {
+        screenModelScope.launch {
+
+            _trackState.value = TrackState.Loading
+
+            val token = TokenStorage.get()
+
+            if (token.isNullOrEmpty()) {
+                _trackState.value = TrackState.Error("Нет токена")
+                return@launch
+            }
+
+            val result = apiClient.addTrackingItem(
+                endpoint = "items/track",
+                token = token,
+                art = art
+            )
+
+            result.onSuccess { success ->
+                _trackState.value = if (success) {
+                    TrackState.Success
+                } else {
+                    TrackState.Error("Не удалось добавить")
+                }
+            }.onFailure {
+                _trackState.value = TrackState.Error(it.message ?: "Ошибка")
             }
         }
     }

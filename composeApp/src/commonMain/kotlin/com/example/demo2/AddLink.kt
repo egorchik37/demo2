@@ -57,7 +57,7 @@ fun TrackSetupScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Отслеживаь $platformName",
+                        text = "Отслеживать: $platformName",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
@@ -101,15 +101,15 @@ fun TrackSetupScreen(
             Button(
                 onClick = {
 
-                    val testData = listOf(
-                        Product2("Шины R16", "5000", 4.8, true, "01.04"),
-                        Product2("Шины R16", "4800", 4.8, true, "05.04"),
-                        Product2("Шины R16", "4500", 4.9, true, "10.04"),
-                        Product2("Шины R16", "4299", 4.9, true, "15.04")
-                    )
+//                    val testData = listOf(
+//                        Product2("Шины R16", "5000", 4.8, true, "01.04"),
+//                        Product2("Шины R16", "4800", 4.8, true, "05.04"),
+//                        Product2("Шины R16", "4500", 4.9, true, "10.04"),
+//                        Product2("Шины R16", "4299", 4.9, true, "15.04")
+//                    )
 
                     onSaveClick(targetPrice, isPushEnabled, isStockTrackingEnabled)
-                    navigator.push(ProductDetailsScreen(testData))
+//                    navigator.push(ProductDetailsScreen(testData))
                 },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp)
